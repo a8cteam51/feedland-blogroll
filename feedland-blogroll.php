@@ -99,7 +99,7 @@ add_action( 'wp_enqueue_scripts', 'feedland_blogroll_enqueue_scripts' );
  * @return string
  */
 function feedland_blogroll_shortcode(): string {
-	return '<div id="divBlogrollContainer"></div><script>$=jQuery;blogroll(BLOGROLL_OPTIONS);</script>';
+	return '<div id="divBlogrollContainer" tabindex="0"></div><script>$=jQuery;blogroll(BLOGROLL_OPTIONS);</script>';
 }
 
 add_shortcode( 'feedland-blogroll', 'feedland_blogroll_shortcode' );
