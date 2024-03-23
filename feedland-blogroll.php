@@ -89,6 +89,16 @@ function feedland_blogroll_enqueue_scripts(): void {
 		'feedland-blogroll-custom',
 		'https://s3.amazonaws.com/scripting.com/code/feedland/home/misc.css'
 	);
+
+	wp_enqueue_style(
+		'feedland-google-fonts-ubuntu',
+		'//fonts.googleapis.com/css?family=Ubuntu:400,500i,700',
+	);
+
+	wp_enqueue_style(
+		'feedland-google-fonts-rancho',
+		'//fonts.googleapis.com/css?family=Rancho',
+	);
 }
 
 add_action( 'wp_enqueue_scripts', 'feedland_blogroll_enqueue_scripts' );
