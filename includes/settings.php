@@ -86,20 +86,6 @@ function feedland_blogroll_settings_init(): void {
 	);
 
 	add_settings_field(
-		'feedland_blogroll_idWhereToAppend',
-		__( 'Element ID to Append Blogroll', 'feedland-blogroll' ),
-		'feedland_blogroll_settings_field_callback',
-		'feedland_blogroll_settings',
-		'feedland_blogroll_settings_section',
-		array(
-			'label_for' => 'feedland_blogroll_idWhereToAppend',
-			'type'      => 'text',
-			'name'      => 'feedland_blogroll_idWhereToAppend',
-			'class'     => 'regular-text',
-		)
-	);
-
-	add_settings_field(
 		'feedland_blogroll_urlBlogrollOpml',
 		__( 'Blogroll OPML URL', 'feedland-blogroll' ),
 		'feedland_blogroll_settings_field_callback',

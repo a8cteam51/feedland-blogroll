@@ -4,7 +4,7 @@
  * Description:       Show a Blogroll on your site.
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version:           0.0.1
+ * Version:           0.0.3
  * Author:            WordPress.com Special Projects
  * Author URI:        https://wpspecialprojects.wordpress.com
  * License:           GPL-2.0-or-later
@@ -72,7 +72,6 @@ function feedland_blogroll_enqueue_scripts(): void {
 			'flDisplayTitle'          => $options['feedland_blogroll_flDisplayTitle'],
 			'urlBlogrollOpml'         => $options['feedland_blogroll_urlBlogrollOpml'],
 			'urlFeedlandViewBlogroll' => $options['feedland_blogroll_urlFeedlandViewBlogroll'],
-			'idWhereToAppend'         => $options['feedland_blogroll_idWhereToAppend'],
 			'maxItemsInBlogroll'      => 40,
 		)
 	);
@@ -116,15 +115,12 @@ function feedland_blogroll_enqueue_scripts(): void {
 }
 
 /**
- * Outputs the blogroll container. `id` must match what's defined in `appConsts.idWhereToAppend`.
+ * Outputs the blogroll container.
  *
  * @return string
  */
 function feedland_blogroll_shortcode(): string {
-	$options = get_option( 'feedland_blogroll_options' );
-	$id      = $options['feedland_blogroll_idWhereToAppend'] ?? 'divBlogrollContainer';
-
-	return sprintf( '<div id="%1$s" class="%1$s" tabindex="0"></div><script>$=jQuery;blogroll(BLOGROLL_OPTIONS);</script>', esc_attr( $id ) );
+	return '<div id="idBlogrollContainer" class="divBlogrollContainer" tabindex="0"></div><script>$=jQuery;blogroll(BLOGROLL_OPTIONS);</script>';
 }
 
 
@@ -138,7 +134,6 @@ function feedland_blogroll_default_options(): void {
 		'feedland_blogroll_flDisplayTitle'          => '1',
 		'feedland_blogroll_urlBlogrollOpml'         => 'https://feedland.social/opml?screenname=davewiner&catname=blogroll',
 		'feedland_blogroll_urlFeedlandViewBlogroll' => 'https://feedland.social/?username=davewiner&catname=blogroll',
-		'feedland_blogroll_idWhereToAppend'         => 'divBlogrollContainer',
 	);
 
 	$options = get_option( 'feedland_blogroll_options' );
