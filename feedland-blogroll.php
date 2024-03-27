@@ -124,7 +124,7 @@ function feedland_blogroll_shortcode(): string {
 	$options = get_option( 'feedland_blogroll_options' );
 	$id      = $options['feedland_blogroll_idWhereToAppend'] ?? 'divBlogrollContainer';
 
-	return sprintf( '<div id="%s" tabindex="0"></div><script>$=jQuery;blogroll(BLOGROLL_OPTIONS);</script>', esc_attr( $id ) );
+	return sprintf( '<div id="%1$s" class="%1$s" tabindex="0"></div><script>$=jQuery;blogroll(BLOGROLL_OPTIONS);</script>', esc_attr( $id ) );
 }
 
 
