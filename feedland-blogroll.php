@@ -40,26 +40,40 @@ function feedland_blogroll_enqueue_scripts(): void {
 		'feedland-basic',
 		'https://s3.amazonaws.com/scripting.com/code/includes/basic/code.js',
 		array( 'jquery' ),
+		'1.0.0',
+		false,
 	);
 
 	wp_enqueue_script(
 		'feedland-api',
 		'https://s3.amazonaws.com/scripting.com/code/feedland/home/api.js',
+		array(),
+		'1.0.0',
+		false,
 	);
 
 	wp_enqueue_script(
 		'feedland-misc',
 		'https://s3.amazonaws.com/scripting.com/code/feedland/home/misc.js',
+		array(),
+		'1.0.0',
+		false,
 	);
 
 	wp_enqueue_script(
 		'bootstrap-js',
 		'https://s3.amazonaws.com/scripting.com/code/includes/bootstrap.min.js',
+		array(),
+		'1.0.0',
+		false,
 	);
 
 	wp_enqueue_script(
 		'feedland-blogroll',
 		'https://code.scripting.com/blogroll/blogroll.js',
+		array(),
+		'1.0.0',
+		false,
 	);
 
 	$options = get_option( 'feedland_blogroll_options' );
@@ -79,38 +93,57 @@ function feedland_blogroll_enqueue_scripts(): void {
 	wp_enqueue_style(
 		'bootstrap',
 		'https://s3.amazonaws.com/scripting.com/code/includes/bootstrap.css',
+		array(),
+		'1.0.0',
+		false,
 	);
 
 	wp_enqueue_style(
 		'feedland-basic',
 		'https://s3.amazonaws.com/scripting.com/code/includes/basic/styles.css',
-		array( 'bootstrap' )
+		array( 'bootstrap' ),
+		'1.0.0',
+		false,
 	);
 
 	wp_enqueue_style(
 		'feedland-blogroll',
 		'https://s3.amazonaws.com/scripting.com/code/blogroll/blogroll.css',
-		array( 'bootstrap' )
+		array( 'bootstrap' ),
+		'1.0.0',
+		false,
 	);
 
 	wp_enqueue_style(
 		'fontawesome',
 		'https://s3.amazonaws.com/scripting.com/code/fontawesome/css/all.css',
+		array(),
+		'1.0.0',
+		false,
 	);
 
 	wp_enqueue_style(
 		'feedland-blogroll-custom',
-		'https://s3.amazonaws.com/scripting.com/code/feedland/home/misc.css'
+		'https://s3.amazonaws.com/scripting.com/code/feedland/home/misc.css',
+		array(),
+		'1.0.0',
+		false,
 	);
 
 	wp_enqueue_style(
 		'feedland-google-fonts-ubuntu',
 		'//fonts.googleapis.com/css?family=Ubuntu:400,500i,700',
+		array(),
+		'1.0.0',
+		false,
 	);
 
 	wp_enqueue_style(
 		'feedland-google-fonts-rancho',
 		'//fonts.googleapis.com/css?family=Rancho',
+		array(),
+		'1.0.0',
+		false,
 	);
 }
 
