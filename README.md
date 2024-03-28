@@ -20,3 +20,6 @@ You can also output the shortcode in your php templates like this:
 ```PHP
 echo do_shortcode( '[feedland-blogroll]' );
 ```
+## Screenshot
+<img width="702" alt="SCR-20240328-jvrd" src="https://github.com/a8cteam51/feedland-blogroll/assets/2067992/e794e178-ab66-43af-971e-eff86ff66257">
+
