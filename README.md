@@ -12,9 +12,16 @@ For more information on what these blogrolls are, please visit: https://blogroll
 2. On your WordPress site, navigate to **Plugins > Add New Plugin > Upload Plugin** and upload the zip file you just downloaded. Activate it.
 3. Add the `[feedland-blogroll]` shortcode anywhere on your site.
 
-### Using the Shortcode
+### Adding the Shortcode
 
-Where you put the shortcode will depend on which theme you are using. In a classic theme, adding the shortcode to the sidebar widget would be a good spot. If you're using a block theme (like _twenty twenty-four_), then editing the site templates and adding the shortcode to the 'Single with Sidebar' template works great.
+Whether selecting a widget or a block, you will choose "Shortcode", then copy/paste this into the input:
+```PHP
+[feedland-blogroll]
+```
+
+Where you put the shortcode will depend on which theme you are using. 
+- In a classic theme, adding the shortcode to the sidebar widget would be a good spot. 
+- If you're using a block theme (like _twenty twenty-four_), then editing the site templates and adding the shortcode to the 'Single with Sidebar' template works great.
 
 You can also output the shortcode in your php templates like this:
 ```PHP
