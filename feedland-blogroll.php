@@ -4,9 +4,10 @@
  * Description:       Show a Blogroll on your site.
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version:           0.0.3
+ * Version:           1.0.0
  * Author:            WordPress.com Special Projects
  * Author URI:        https://wpspecialprojects.wordpress.com
+ * Update URI:        https://github.com/a8cteam51/feedland-blogroll
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       feedland-blogroll
@@ -19,6 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once 'includes/settings.php';
+require_once 'includes/self-update.php';
 
 /**
  * Actions and shortcodes here
