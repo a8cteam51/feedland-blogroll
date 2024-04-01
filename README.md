@@ -1,3 +1,6 @@
+| :exclamation:  This is a public repository |
+|--------------------------------------------|
+
 # Feedland Blogroll for WordPress
 
 ## What is this?
@@ -30,3 +33,5 @@ echo do_shortcode( '[feedland-blogroll]' );
 ## Screenshot
 <img width="702" alt="SCR-20240328-jvrd" src="https://github.com/a8cteam51/feedland-blogroll/assets/2067992/e794e178-ab66-43af-971e-eff86ff66257">
 
+## Disclaimer
+This public plugin is under active development. Please use at your own discretion and test thoroughly before adding to a production site.
