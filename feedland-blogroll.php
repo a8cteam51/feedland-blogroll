@@ -19,6 +19,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+if ( defined( 'FEEDLAND_BLOGROLL_PATH' ) ) {
+	return; // Return if another copy of the plugin is activated
+}
+
+define( 'FEEDLAND_BLOGROLL_PATH', plugin_dir_path( __FILE__ ) );
+
 require_once 'includes/settings.php';
 require_once 'includes/self-update.php';
 
@@ -38,7 +44,7 @@ add_filter( 'plugin_action_links_feedland-blogroll/feedland-blogroll.php', 'feed
  * @return void
  */
 function feedland_blogroll_enqueue_scripts(): void {
-	wp_enqueue_script(
+	wp_register_script(
 		'feedland-basic',
 		'https://s3.amazonaws.com/scripting.com/code/includes/basic/code.js',
 		array( 'jquery' ),
@@ -46,7 +52,7 @@ function feedland_blogroll_enqueue_scripts(): void {
 		false,
 	);
 
-	wp_enqueue_script(
+	wp_register_script(
 		'feedland-api',
 		'https://s3.amazonaws.com/scripting.com/code/feedland/home/api.js',
 		array(),
@@ -54,7 +60,7 @@ function feedland_blogroll_enqueue_scripts(): void {
 		false,
 	);
 
-	wp_enqueue_script(
+	wp_register_script(
 		'feedland-misc',
 		'https://s3.amazonaws.com/scripting.com/code/feedland/home/misc.js',
 		array(),
@@ -62,7 +68,7 @@ function feedland_blogroll_enqueue_scripts(): void {
 		false,
 	);
 
-	wp_enqueue_script(
+	wp_register_script(
 		'bootstrap-js',
 		'https://s3.amazonaws.com/scripting.com/code/includes/bootstrap.min.js',
 		array(),
@@ -70,13 +76,77 @@ function feedland_blogroll_enqueue_scripts(): void {
 		false,
 	);
 
-	wp_enqueue_script(
+	wp_register_script(
 		'feedland-blogroll',
 		'https://code.scripting.com/blogroll/blogroll.js',
 		array(),
 		'1.0.0',
 		false,
 	);
+
+	wp_register_style(
+		'bootstrap',
+		'https://s3.amazonaws.com/scripting.com/code/includes/bootstrap.css',
+		array(),
+		'1.0.0',
+		false,
+	);
+
+	wp_register_style(
+		'feedland-basic',
+		'https://s3.amazonaws.com/scripting.com/code/includes/basic/styles.css',
+		array( 'bootstrap' ),
+		'1.0.0',
+		false,
+	);
+
+	wp_register_style(
+		'feedland-blogroll',
+		'https://s3.amazonaws.com/scripting.com/code/blogroll/blogroll.css',
+		array( 'bootstrap' ),
+		'1.0.0',
+		false,
+	);
+
+	wp_register_style(
+		'fontawesome',
+		'https://s3.amazonaws.com/scripting.com/code/fontawesome/css/all.css',
+		array(),
+		'1.0.0',
+		false,
+	);
+
+	wp_register_style(
+		'feedland-blogroll-custom',
+		'https://s3.amazonaws.com/scripting.com/code/feedland/home/misc.css',
+		array(),
+		'1.0.0',
+		false,
+	);
+
+	wp_register_style(
+		'feedland-google-fonts-ubuntu',
+		'//fonts.googleapis.com/css?family=Ubuntu:400,500i,700',
+		array(),
+		'1.0.0',
+		false,
+	);
+
+	wp_register_style(
+		'feedland-google-fonts-rancho',
+		'//fonts.googleapis.com/css?family=Rancho',
+		array(),
+		'1.0.0',
+		false,
+	);
+}
+
+/**
+ * Outputs the blogroll container.
+ *
+ * @return string
+ */
+function feedland_blogroll_shortcode(): string {
 
 	$options = get_option( 'feedland_blogroll_options' );
 
@@ -92,69 +162,19 @@ function feedland_blogroll_enqueue_scripts(): void {
 		)
 	);
 
-	wp_enqueue_style(
-		'bootstrap',
-		'https://s3.amazonaws.com/scripting.com/code/includes/bootstrap.css',
-		array(),
-		'1.0.0',
-		false,
-	);
+	wp_enqueue_script( 'feedland-basic' );
+	wp_enqueue_script( 'feedland-api' );
+	wp_enqueue_script( 'feedland-misc' );
+	wp_enqueue_script( 'bootstrap-js' );
+	wp_enqueue_script( 'feedland-blogroll' );
+	wp_enqueue_style( 'bootstrap' );
+	wp_enqueue_style( 'feedland-basic' );
+	wp_enqueue_style( 'feedland-blogroll' );
+	wp_enqueue_style( 'fontawesome' );
+	wp_enqueue_style( 'feedland-blogroll-custom' );
+	wp_enqueue_style( 'feedland-google-fonts-ubuntu' );
+	wp_enqueue_style( 'feedland-google-fonts-rancho' );
 
-	wp_enqueue_style(
-		'feedland-basic',
-		'https://s3.amazonaws.com/scripting.com/code/includes/basic/styles.css',
-		array( 'bootstrap' ),
-		'1.0.0',
-		false,
-	);
-
-	wp_enqueue_style(
-		'feedland-blogroll',
-		'https://s3.amazonaws.com/scripting.com/code/blogroll/blogroll.css',
-		array( 'bootstrap' ),
-		'1.0.0',
-		false,
-	);
-
-	wp_enqueue_style(
-		'fontawesome',
-		'https://s3.amazonaws.com/scripting.com/code/fontawesome/css/all.css',
-		array(),
-		'1.0.0',
-		false,
-	);
-
-	wp_enqueue_style(
-		'feedland-blogroll-custom',
-		'https://s3.amazonaws.com/scripting.com/code/feedland/home/misc.css',
-		array(),
-		'1.0.0',
-		false,
-	);
-
-	wp_enqueue_style(
-		'feedland-google-fonts-ubuntu',
-		'//fonts.googleapis.com/css?family=Ubuntu:400,500i,700',
-		array(),
-		'1.0.0',
-		false,
-	);
-
-	wp_enqueue_style(
-		'feedland-google-fonts-rancho',
-		'//fonts.googleapis.com/css?family=Rancho',
-		array(),
-		'1.0.0',
-		false,
-	);
-}
-
-/**
- * Outputs the blogroll container.
- *
- * @return string
- */
-function feedland_blogroll_shortcode(): string {
 	return '<div id="idBlogrollContainer" class="divBlogrollContainer" tabindex="0"></div><script>$=jQuery;blogroll(BLOGROLL_OPTIONS);</script>';
 }
 
