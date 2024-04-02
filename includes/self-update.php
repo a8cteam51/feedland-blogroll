@@ -47,11 +47,6 @@ function feedland_blogroll_self_update( $update, array $plugin_data, string $plu
 	$new_url     = $output['html_url'];
 	$new_package = $output['assets'][0]['browser_download_url'];
 
-	error_log('$plugin_data: ' . print_r( $plugin_data, true ));
-	error_log('$new_version_number: ' . $new_version_number );
-	error_log('$new_url: ' . $new_url );
-	error_log('$new_package: ' . $new_package );
-
 	return array(
 		'slug'    => $plugin_data['TextDomain'],
 		'version' => $new_version_number,
