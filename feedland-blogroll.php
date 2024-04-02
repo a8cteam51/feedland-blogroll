@@ -44,6 +44,7 @@ add_filter( 'plugin_action_links_feedland-blogroll/feedland-blogroll.php', 'feed
  * @return void
  */
 function feedland_blogroll_enqueue_scripts(): void {
+
 	wp_register_script(
 		'feedland-basic',
 		'https://s3.amazonaws.com/scripting.com/code/includes/basic/code.js',
@@ -139,14 +140,6 @@ function feedland_blogroll_enqueue_scripts(): void {
 		'1.0.0',
 		false,
 	);
-}
-
-/**
- * Outputs the blogroll container.
- *
- * @return string
- */
-function feedland_blogroll_shortcode(): string {
 
 	$options = get_option( 'feedland_blogroll_options' );
 
@@ -161,6 +154,14 @@ function feedland_blogroll_shortcode(): string {
 			'maxItemsInBlogroll'      => 40,
 		)
 	);
+}
+
+/**
+ * Outputs the blogroll container.
+ *
+ * @return string
+ */
+function feedland_blogroll_shortcode(): string {
 
 	wp_enqueue_script( 'feedland-basic' );
 	wp_enqueue_script( 'feedland-api' );
