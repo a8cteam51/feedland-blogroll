@@ -86,7 +86,7 @@ function feedland_blogroll_enqueue_scripts(): void {
 
 	wp_register_style(
 		'bootstrap',
-		'https://s3.amazonaws.com/scripting.com/code/includes/bootstrap.css',
+		'https://s3.amazonaws.com/scripting.com/code/blogroll/smallbootstrap.css',
 		array(),
 		'1.0.0',
 		false,
