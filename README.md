@@ -13,7 +13,8 @@ For more information on what these blogrolls are, please visit: https://blogroll
 
 1. Download the latest [feedland-blogroll.zip](https://github.com/a8cteam51/feedland-blogroll/releases) release from here: https://github.com/a8cteam51/feedland-blogroll/releases
 2. On your WordPress site, navigate to **Plugins > Add New Plugin > Upload Plugin** and upload the zip file you just downloaded. Activate it.
-3. Add the `[feedland-blogroll]` shortcode anywhere on your site.
+3. Adjust the plugin settings at **Settings > FeedLand Blogroll**
+4. Add the `[feedland-blogroll]` shortcode anywhere on your site to display the blogroll.
 
 ### Adding the Shortcode
 
