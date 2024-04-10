@@ -127,7 +127,7 @@ function feedland_blogroll_settings_init(): void {
 			'type'        => 'text',
 			'name'        => 'feedland_blogroll_category',
 			'class'       => 'regular-text',
-			'placeholder' => FEEDLAND_DEFAULT_CATEGORY,
+			'placeholder' => 'blogroll',
 		)
 	);
 }
