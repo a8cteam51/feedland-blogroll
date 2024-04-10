@@ -81,7 +81,7 @@ function feedland_blogroll_settings_init(): void {
 			'label_for' => 'feedland_blogroll_flDisplayTitle',
 			'type'      => 'checkbox',
 			'name'      => 'feedland_blogroll_flDisplayTitle',
-			'class'     => 'regular-text',
+			'class'     => '',
 		)
 	);
 
