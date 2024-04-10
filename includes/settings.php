@@ -86,33 +86,50 @@ function feedland_blogroll_settings_init(): void {
 	);
 
 	add_settings_field(
-		'feedland_blogroll_urlBlogrollOpml',
-		__( 'Blogroll OPML URL', 'feedland-blogroll' ),
+		'feedland_blogroll_server',
+		__( 'FeedLand Server', 'feedland-blogroll' ),
 		'feedland_blogroll_settings_field_callback',
 		'feedland_blogroll_settings',
 		'feedland_blogroll_settings_section',
 		array(
-			'label_for' => 'feedland_blogroll_urlBlogrollOpml',
-			'type'      => 'url',
-			'name'      => 'feedland_blogroll_urlBlogrollOpml',
-			'class'     => 'regular-text',
+			'label_for'   => 'feedland_blogroll_server',
+			'type'        => 'url',
+			'name'        => 'feedland_blogroll_server',
+			'class'       => 'regular-text',
+			'placeholder' => FEEDLAND_DEFAULT_SERVER
 		)
 	);
 
 	add_settings_field(
-		'feedland_blogroll_urlFeedlandViewBlogroll',
-		__( 'Feedland View Blogroll URL', 'feedland-blogroll' ),
+		'feedland_blogroll_username',
+		__( 'FeedLand Username', 'feedland-blogroll' ),
 		'feedland_blogroll_settings_field_callback',
 		'feedland_blogroll_settings',
 		'feedland_blogroll_settings_section',
 		array(
-			'label_for' => 'feedland_blogroll_urlFeedlandViewBlogroll',
-			'type'      => 'url',
-			'name'      => 'feedland_blogroll_urlFeedlandViewBlogroll',
-			'class'     => 'regular-text',
+			'label_for'   => 'feedland_blogroll_username',
+			'type'        => 'text',
+			'name'        => 'feedland_blogroll_username',
+			'class'       => 'regular-text',
+			'placeholder' => FEEDLAND_DEFAULT_USERNAME,
+			'description' => esc_html( 'Username associated with the FeedLand feed you want to display on your site.', 'feedland-blogroll' ),
 		)
 	);
 
+	add_settings_field(
+		'feedland_blogroll_category',
+		__( 'Category', 'feedland-blogroll' ),
+		'feedland_blogroll_settings_field_callback',
+		'feedland_blogroll_settings',
+		'feedland_blogroll_settings_section',
+		array(
+			'label_for'   => 'feedland_blogroll_category',
+			'type'        => 'text',
+			'name'        => 'feedland_blogroll_category',
+			'class'       => 'regular-text',
+			'placeholder' => FEEDLAND_DEFAULT_CATEGORY,
+		)
+	);
 }
 
 /**
@@ -134,17 +151,18 @@ function feedland_blogroll_settings_section_callback(): void {
 function feedland_blogroll_settings_field_callback( array $args ): void {
 	$options = get_option( 'feedland_blogroll_options' );
 
-	$value = isset( $options[ $args['name'] ] ) ? $options[ $args['name'] ] : '';
+	$value = $options[ $args['name'] ] ?? '';
 
 	switch ( $args['type'] ) {
 		case 'text':
 		case 'url':
 			printf(
-				'<input type="%1$s" id="%2$s" name="feedland_blogroll_options[%2$s]" value="%3$s" class="%4$s" />',
+				'<input type="%1$s" id="%2$s" name="feedland_blogroll_options[%2$s]" value="%3$s" class="%4$s" placeholder="%5$s" />',
 				esc_attr( $args['type'] ),
 				esc_attr( $args['name'] ),
 				esc_attr( $value ),
-				esc_attr( $args['class'] )
+				esc_attr( $args['class'] ),
+				esc_attr( $args['placeholder'] ?? '' )
 			);
 			break;
 		case 'checkbox':
