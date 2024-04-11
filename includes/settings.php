@@ -46,8 +46,10 @@ function feedland_blogroll_settings_page(): void {
 function feedland_blogroll_settings_init(): void {
 	register_setting(
 		'feedland_blogroll_settings',
-		'feedland_blogroll_options'
-		// Optional: Add a sanitize callback function if needed for validation later
+		'feedland_blogroll_options',
+		array(
+			'sanitize_callback' => 'feedland_validate_options',
+		)
 	);
 
 	add_settings_section(
@@ -86,21 +88,6 @@ function feedland_blogroll_settings_init(): void {
 	);
 
 	add_settings_field(
-		'feedland_blogroll_server',
-		__( 'FeedLand Server', 'feedland-blogroll' ),
-		'feedland_blogroll_settings_field_callback',
-		'feedland_blogroll_settings',
-		'feedland_blogroll_settings_section',
-		array(
-			'label_for'   => 'feedland_blogroll_server',
-			'type'        => 'url',
-			'name'        => 'feedland_blogroll_server',
-			'class'       => 'regular-text',
-			'placeholder' => FEEDLAND_DEFAULT_SERVER
-		)
-	);
-
-	add_settings_field(
 		'feedland_blogroll_username',
 		__( 'FeedLand Username', 'feedland-blogroll' ),
 		'feedland_blogroll_settings_field_callback',
@@ -112,7 +99,7 @@ function feedland_blogroll_settings_init(): void {
 			'name'        => 'feedland_blogroll_username',
 			'class'       => 'regular-text',
 			'placeholder' => FEEDLAND_DEFAULT_USERNAME,
-			'description' => esc_html( 'Username associated with the FeedLand feed you want to display on your site.', 'feedland-blogroll' ),
+			'description' => esc_html__( 'Username associated with the FeedLand feed you want to display on your site.', 'feedland-blogroll' ),
 		)
 	);
 
@@ -193,4 +180,80 @@ function feedland_blogroll_add_action_links( array $links ): array {
 	$settings_link = '<a href="' . esc_url( get_admin_url( null, 'options-general.php?page=' . $settings_slug ) ) . '">' . esc_html__( 'Settings', 'feedland-blogroll' ) . '</a>';
 	array_unshift( $links, $settings_link );
 	return $links;
+}
+
+/**
+ * Validate options before saving
+ *
+ * @param array $input Options to validate
+ *
+ * @return array Validated options
+ */
+function feedland_validate_options( array $input ): array {
+	$input         = array_map( 'sanitize_text_field', $input );
+	$user_endpoint = sprintf( '%1$sisuserindatabase?screenname=%2$s', FEEDLAND_DEFAULT_SERVER, $input['feedland_blogroll_username'] );
+
+	$request = wp_remote_get( $user_endpoint );
+
+	if ( is_wp_error( $request ) ) {
+		add_settings_error(
+			'feedland_blogroll_settings',
+			'feedland_blogroll_username',
+			esc_html__( 'There was an error communicating with the server.', 'feedland-blogroll' )
+		);
+
+		$input['feedland_blogroll_username'] = FEEDLAND_DEFAULT_USERNAME;
+	}
+
+	$response = json_decode( wp_remote_retrieve_body( $request ), true );
+
+	if ( ! $response['flInDatabase'] ) {
+		add_settings_error(
+			'feedland_blogroll_settings',
+			'feedland_blogroll_username',
+			sprintf(
+				/* translators: %s: Default username placeholder */
+				esc_html__( 'The username provided is not associated with a FeedLand account. Using default "%s".', 'feedland-blogroll' ),
+				FEEDLAND_DEFAULT_USERNAME
+			)
+		);
+
+		$input['feedland_blogroll_username'] = FEEDLAND_DEFAULT_USERNAME;
+	}
+
+	// Validate category, since username is now validated or default.
+	$request = wp_remote_get(
+		add_query_arg(
+			array(
+				'url' => rawurlencode( feedland_get_opml_url( $input['feedland_blogroll_category'] ) ),
+			),
+			FEEDLAND_DEFAULT_SERVER . 'getfeedlistfromopml'
+		)
+	);
+
+	if ( is_wp_error( $request ) ) {
+		add_settings_error(
+			'feedland_blogroll_settings',
+			'feedland_blogroll_category',
+			esc_html__( 'There was an error communicating with the server.', 'feedland-blogroll' )
+		);
+
+		$input['feedland_blogroll_category'] = '';
+	}
+
+	$response = json_decode( wp_remote_retrieve_body( $request ), true );
+
+	// If the response contains a message, the category does not exist.
+	if ( array_key_exists( 'message', $response ) ) {
+		add_settings_error(
+			'feedland_blogroll_settings',
+			'feedland_blogroll_category',
+			/* translators: %s: Default category placeholder */
+			esc_html__( 'The user does not have that category in their feed. Using no category to query feed.', 'feedland-blogroll' )
+		);
+
+		$input['feedland_blogroll_category'] = '';
+	}
+
+	return $input;
 }

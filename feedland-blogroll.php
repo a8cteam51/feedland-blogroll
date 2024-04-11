@@ -25,7 +25,7 @@ if ( defined( 'FEEDLAND_BLOGROLL_PATH' ) ) {
 
 define( 'FEEDLAND_BLOGROLL_PATH', plugin_dir_path( __FILE__ ) );
 
-define( 'FEEDLAND_DEFAULT_SERVER', 'https://feedland.social' );
+define( 'FEEDLAND_DEFAULT_SERVER', 'https://feedland.social/' );
 define( 'FEEDLAND_DEFAULT_USERNAME', 'davewiner' );
 
 require_once 'includes/settings.php';
@@ -214,17 +214,17 @@ function feedland_blogroll_default_options(): void {
  *
  * @return string
  */
-function feedland_get_opml_url() {
+function feedland_get_opml_url( $category = '' ) {
 	$options = get_option( 'feedland_blogroll_options' );
 
 	return add_query_arg(
 		array_filter(
 			array(
-				'screenname' => $options['feedland_blogroll_username'] ?: FEEDLAND_DEFAULT_USERNAME,
-				'catname'    => $options['feedland_blogroll_category'],
+				'screenname' => $options['feedland_blogroll_username'] ?: FEEDLAND_DEFAULT_USERNAME, // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
+				'catname'    => $category ?: $options['feedland_blogroll_category'], // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
 			)
 		),
-		trailingslashit( $options['feedland_blogroll_server'] ?: FEEDLAND_DEFAULT_SERVER ) . 'opml'
+		FEEDLAND_DEFAULT_SERVER . 'opml'
 	);
 }
 
@@ -239,10 +239,10 @@ function feedland_get_blogroll_url() {
 	return add_query_arg(
 		array_filter(
 			array(
-				'username' => $options['feedland_blogroll_username'] ?: FEEDLAND_DEFAULT_USERNAME,
+				'username' => $options['feedland_blogroll_username'] ?: FEEDLAND_DEFAULT_USERNAME, // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
 				'catname'  => $options['feedland_blogroll_category'],
 			)
 		),
-		trailingslashit( $options['feedland_blogroll_server'] ?: FEEDLAND_DEFAULT_SERVER )
+		FEEDLAND_DEFAULT_SERVER
 	);
 }
