@@ -4,7 +4,7 @@
  * Description:       Show a Blogroll on your site.
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version:           1.0.2
+ * Version:           1.1.0
  * Author:            WordPress.com Special Projects
  * Author URI:        https://wpspecialprojects.wordpress.com
  * Update URI:        https://github.com/a8cteam51/feedland-blogroll
@@ -24,6 +24,9 @@ if ( defined( 'FEEDLAND_BLOGROLL_PATH' ) ) {
 }
 
 define( 'FEEDLAND_BLOGROLL_PATH', plugin_dir_path( __FILE__ ) );
+
+define( 'FEEDLAND_DEFAULT_SERVER', 'https://feedland.com/' );
+define( 'FEEDLAND_DEFAULT_USERNAME', 'davewiner' );
 
 require_once 'includes/settings.php';
 require_once 'includes/self-update.php';
@@ -148,9 +151,9 @@ function feedland_blogroll_enqueue_scripts(): void {
 		'BLOGROLL_OPTIONS',
 		array(
 			'title'                   => $options['feedland_blogroll_title'],
-			'flDisplayTitle'          => $options['feedland_blogroll_flDisplayTitle'],
-			'urlBlogrollOpml'         => $options['feedland_blogroll_urlBlogrollOpml'],
-			'urlFeedlandViewBlogroll' => $options['feedland_blogroll_urlFeedlandViewBlogroll'],
+			'flDisplayTitle'          => $options['feedland_blogroll_flDisplayTitle'] ?? false, // Prevents a warning if settings are saved and checkbox is unchecked.
+			'urlBlogrollOpml'         => feedland_get_opml_url(),
+			'urlFeedlandViewBlogroll' => feedland_get_blogroll_url(),
 			'maxItemsInBlogroll'      => 40,
 		)
 	);
@@ -187,8 +190,10 @@ function feedland_blogroll_default_options(): void {
 	$defaults = array(
 		'feedland_blogroll_title'                   => __( 'My Blogroll', 'feedland-blogroll' ),
 		'feedland_blogroll_flDisplayTitle'          => '1',
-		'feedland_blogroll_urlBlogrollOpml'         => 'https://feedland.social/opml?screenname=davewiner&catname=blogroll',
-		'feedland_blogroll_urlFeedlandViewBlogroll' => 'https://feedland.social/?username=davewiner&catname=blogroll',
+		'feedland_blogroll_server'                  => FEEDLAND_DEFAULT_SERVER,
+		'feedland_blogroll_username'                => FEEDLAND_DEFAULT_USERNAME,
+		'feedland_blogroll_urlBlogrollOpml'         => feedland_get_opml_url(),
+		'feedland_blogroll_urlFeedlandViewBlogroll' => feedland_get_blogroll_url(),
 	);
 
 	$options = get_option( 'feedland_blogroll_options' );
@@ -201,4 +206,40 @@ function feedland_blogroll_default_options(): void {
 		$options = wp_parse_args( $options, $defaults );
 		update_option( 'feedland_blogroll_options', $options );
 	}
+}
+
+/**
+ * Formats the Blogroll OPML URL using the user provided settings.
+ *
+ * @return string
+ */
+function feedland_get_opml_url() {
+	$options = get_option( 'feedland_blogroll_options' );
+
+	return add_query_arg(
+		array_filter(
+			array(
+				'screenname' => $options['feedland_blogroll_username'] ?: FEEDLAND_DEFAULT_USERNAME, // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
+			)
+		),
+		FEEDLAND_DEFAULT_SERVER . 'opml'
+	);
+}
+
+/**
+ * Formats the Blogroll URL using the user provided settings.
+ *
+ * @return string
+ */
+function feedland_get_blogroll_url() {
+	$options = get_option( 'feedland_blogroll_options' );
+
+	return add_query_arg(
+		array_filter(
+			array(
+				'username' => $options['feedland_blogroll_username'] ?: FEEDLAND_DEFAULT_USERNAME, // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
+			)
+		),
+		FEEDLAND_DEFAULT_SERVER
+	);
 }

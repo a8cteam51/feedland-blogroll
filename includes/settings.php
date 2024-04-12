@@ -46,8 +46,10 @@ function feedland_blogroll_settings_page(): void {
 function feedland_blogroll_settings_init(): void {
 	register_setting(
 		'feedland_blogroll_settings',
-		'feedland_blogroll_options'
-		// Optional: Add a sanitize callback function if needed for validation later
+		'feedland_blogroll_options',
+		array(
+			'sanitize_callback' => 'feedland_blogroll_validate_options',
+		)
 	);
 
 	add_settings_section(
@@ -81,38 +83,24 @@ function feedland_blogroll_settings_init(): void {
 			'label_for' => 'feedland_blogroll_flDisplayTitle',
 			'type'      => 'checkbox',
 			'name'      => 'feedland_blogroll_flDisplayTitle',
-			'class'     => 'regular-text',
+			'class'     => '',
 		)
 	);
 
 	add_settings_field(
-		'feedland_blogroll_urlBlogrollOpml',
-		__( 'Blogroll OPML URL', 'feedland-blogroll' ),
+		'feedland_blogroll_username',
+		__( 'FeedLand Username', 'feedland-blogroll' ),
 		'feedland_blogroll_settings_field_callback',
 		'feedland_blogroll_settings',
 		'feedland_blogroll_settings_section',
 		array(
-			'label_for' => 'feedland_blogroll_urlBlogrollOpml',
-			'type'      => 'url',
-			'name'      => 'feedland_blogroll_urlBlogrollOpml',
-			'class'     => 'regular-text',
+			'label_for'   => 'feedland_blogroll_username',
+			'type'        => 'text',
+			'name'        => 'feedland_blogroll_username',
+			'class'       => 'regular-text',
+			'description' => esc_html__( 'Username associated with the FeedLand feed you want to display on your site.', 'feedland-blogroll' ),
 		)
 	);
-
-	add_settings_field(
-		'feedland_blogroll_urlFeedlandViewBlogroll',
-		__( 'Feedland View Blogroll URL', 'feedland-blogroll' ),
-		'feedland_blogroll_settings_field_callback',
-		'feedland_blogroll_settings',
-		'feedland_blogroll_settings_section',
-		array(
-			'label_for' => 'feedland_blogroll_urlFeedlandViewBlogroll',
-			'type'      => 'url',
-			'name'      => 'feedland_blogroll_urlFeedlandViewBlogroll',
-			'class'     => 'regular-text',
-		)
-	);
-
 }
 
 /**
@@ -134,17 +122,18 @@ function feedland_blogroll_settings_section_callback(): void {
 function feedland_blogroll_settings_field_callback( array $args ): void {
 	$options = get_option( 'feedland_blogroll_options' );
 
-	$value = isset( $options[ $args['name'] ] ) ? $options[ $args['name'] ] : '';
+	$value = $options[ $args['name'] ] ?? '';
 
 	switch ( $args['type'] ) {
 		case 'text':
 		case 'url':
 			printf(
-				'<input type="%1$s" id="%2$s" name="feedland_blogroll_options[%2$s]" value="%3$s" class="%4$s" />',
+				'<input type="%1$s" id="%2$s" name="feedland_blogroll_options[%2$s]" value="%3$s" class="%4$s" placeholder="%5$s" />',
 				esc_attr( $args['type'] ),
 				esc_attr( $args['name'] ),
 				esc_attr( $value ),
-				esc_attr( $args['class'] )
+				esc_attr( $args['class'] ),
+				esc_attr( $args['placeholder'] ?? '' )
 			);
 			break;
 		case 'checkbox':
@@ -175,4 +164,46 @@ function feedland_blogroll_add_action_links( array $links ): array {
 	$settings_link = '<a href="' . esc_url( get_admin_url( null, 'options-general.php?page=' . $settings_slug ) ) . '">' . esc_html__( 'Settings', 'feedland-blogroll' ) . '</a>';
 	array_unshift( $links, $settings_link );
 	return $links;
+}
+
+/**
+ * Validate options before saving
+ *
+ * @param array $input Options to validate
+ *
+ * @return array Validated options
+ */
+function feedland_blogroll_validate_options( array $input ): array {
+	$input         = array_map( 'sanitize_text_field', $input );
+	$user_endpoint = sprintf( '%1$sisuserindatabase?screenname=%2$s', FEEDLAND_DEFAULT_SERVER, $input['feedland_blogroll_username'] );
+
+	$request = wp_remote_get( $user_endpoint );
+
+	if ( is_wp_error( $request ) ) {
+		add_settings_error(
+			'feedland_blogroll_settings',
+			'feedland_blogroll_username',
+			esc_html__( 'There was an error communicating with the server.', 'feedland-blogroll' )
+		);
+
+		$input['feedland_blogroll_username'] = FEEDLAND_DEFAULT_USERNAME;
+	}
+
+	$response = json_decode( wp_remote_retrieve_body( $request ), true );
+
+	if ( ! $response['flInDatabase'] ) {
+		add_settings_error(
+			'feedland_blogroll_settings',
+			'feedland_blogroll_username',
+			sprintf(
+				/* translators: %s: Default username placeholder */
+				esc_html__( 'The username provided is not associated with a FeedLand account. Using default "%s".', 'feedland-blogroll' ),
+				FEEDLAND_DEFAULT_USERNAME
+			)
+		);
+
+		$input['feedland_blogroll_username'] = FEEDLAND_DEFAULT_USERNAME;
+	}
+
+	return $input;
 }

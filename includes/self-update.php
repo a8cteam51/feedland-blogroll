@@ -1,5 +1,5 @@
 <?php
-add_filter( 'update_plugins_github.com', 'feedland_blogroll_self_update', 10, 4 );
+add_filter( 'update_plugins_github.com', 'feedland_blogroll_self_update', 10, 3 );
 
 /**
  * Check for updates to this plugin
@@ -11,7 +11,7 @@ add_filter( 'update_plugins_github.com', 'feedland_blogroll_self_update', 10, 4 
  *
  * @return array|false Array of update data or false if no update available.
  */
-function feedland_blogroll_self_update( $update, array $plugin_data, string $plugin_file, $locales ) {
+function feedland_blogroll_self_update( $update, array $plugin_data, string $plugin_file ) {
 
 	// only check this plugin
 	if ( 'feedland-blogroll/feedland-blogroll.php' !== $plugin_file ) {
