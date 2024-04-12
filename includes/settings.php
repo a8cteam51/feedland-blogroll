@@ -101,20 +101,6 @@ function feedland_blogroll_settings_init(): void {
 			'description' => esc_html__( 'Username associated with the FeedLand feed you want to display on your site.', 'feedland-blogroll' ),
 		)
 	);
-
-	add_settings_field(
-		'feedland_blogroll_category',
-		__( 'Category (optional)', 'feedland-blogroll' ),
-		'feedland_blogroll_settings_field_callback',
-		'feedland_blogroll_settings',
-		'feedland_blogroll_settings_section',
-		array(
-			'label_for'   => 'feedland_blogroll_category',
-			'type'        => 'text',
-			'name'        => 'feedland_blogroll_category',
-			'class'       => 'regular-text',
-		)
-	);
 }
 
 /**
@@ -217,43 +203,6 @@ function feedland_blogroll_validate_options( array $input ): array {
 		);
 
 		$input['feedland_blogroll_username'] = FEEDLAND_DEFAULT_USERNAME;
-	}
-
-	// Validate category, since username is now validated or default.
-	$request = wp_remote_get(
-		add_query_arg(
-			array(
-				'url' => rawurlencode( feedland_get_opml_url( $input['feedland_blogroll_category'] ) ),
-			),
-			FEEDLAND_DEFAULT_SERVER . 'getfeedlistfromopml'
-		)
-	);
-
-	if ( is_wp_error( $request ) ) {
-		add_settings_error(
-			'feedland_blogroll_settings',
-			'feedland_blogroll_category',
-			esc_html__( 'There was an error communicating with the server.', 'feedland-blogroll' )
-		);
-
-		$input['feedland_blogroll_category'] = FEEDLAND_DEFAULT_CATEGORY;
-	}
-
-	$response = json_decode( wp_remote_retrieve_body( $request ), true );
-
-	// If the response contains a message, the category does not exist.
-	if ( array_key_exists( 'message', $response ) ) {
-		add_settings_error(
-			'feedland_blogroll_settings',
-			'feedland_blogroll_category',
-			sprintf(
-				/* translators: %s: Default category placeholder */
-				esc_html__( 'The user does not have that category in their feed. Using default "%s".', 'feedland-blogroll' ),
-				FEEDLAND_DEFAULT_CATEGORY
-			)
-		);
-
-		$input['feedland_blogroll_category'] = FEEDLAND_DEFAULT_CATEGORY;
 	}
 
 	return $input;
