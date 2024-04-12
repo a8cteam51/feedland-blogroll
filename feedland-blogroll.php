@@ -25,8 +25,9 @@ if ( defined( 'FEEDLAND_BLOGROLL_PATH' ) ) {
 
 define( 'FEEDLAND_BLOGROLL_PATH', plugin_dir_path( __FILE__ ) );
 
-define( 'FEEDLAND_DEFAULT_SERVER', 'https://feedland.social/' );
+define( 'FEEDLAND_DEFAULT_SERVER', 'https://feedland.com/' );
 define( 'FEEDLAND_DEFAULT_USERNAME', 'davewiner' );
+define( 'FEEDLAND_DEFAULT_CATEGORY', 'blogroll' );
 
 require_once 'includes/settings.php';
 require_once 'includes/self-update.php';
@@ -192,7 +193,7 @@ function feedland_blogroll_default_options(): void {
 		'feedland_blogroll_flDisplayTitle'          => '1',
 		'feedland_blogroll_server'                  => FEEDLAND_DEFAULT_SERVER,
 		'feedland_blogroll_username'                => FEEDLAND_DEFAULT_USERNAME,
-		'feedland_blogroll_category'                => '',
+		'feedland_blogroll_category'                => FEEDLAND_DEFAULT_CATEGORY,
 		'feedland_blogroll_urlBlogrollOpml'         => feedland_get_opml_url(),
 		'feedland_blogroll_urlFeedlandViewBlogroll' => feedland_get_blogroll_url(),
 	);
@@ -212,9 +213,11 @@ function feedland_blogroll_default_options(): void {
 /**
  * Formats the Blogroll OPML URL using the user provided settings.
  *
+ * @param string $category The category to use in the URL. Defaults to the `blogroll` category.
+ *
  * @return string
  */
-function feedland_get_opml_url( $category = '' ) {
+function feedland_get_opml_url( $category = FEEDLAND_DEFAULT_CATEGORY ) {
 	$options = get_option( 'feedland_blogroll_options' );
 
 	return add_query_arg(

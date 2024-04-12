@@ -48,7 +48,7 @@ function feedland_blogroll_settings_init(): void {
 		'feedland_blogroll_settings',
 		'feedland_blogroll_options',
 		array(
-			'sanitize_callback' => 'feedland_validate_options',
+			'sanitize_callback' => 'feedland_blogroll_validate_options',
 		)
 	);
 
@@ -98,14 +98,13 @@ function feedland_blogroll_settings_init(): void {
 			'type'        => 'text',
 			'name'        => 'feedland_blogroll_username',
 			'class'       => 'regular-text',
-			'placeholder' => FEEDLAND_DEFAULT_USERNAME,
 			'description' => esc_html__( 'Username associated with the FeedLand feed you want to display on your site.', 'feedland-blogroll' ),
 		)
 	);
 
 	add_settings_field(
 		'feedland_blogroll_category',
-		__( 'Category', 'feedland-blogroll' ),
+		__( 'Category (optional)', 'feedland-blogroll' ),
 		'feedland_blogroll_settings_field_callback',
 		'feedland_blogroll_settings',
 		'feedland_blogroll_settings_section',
@@ -114,7 +113,6 @@ function feedland_blogroll_settings_init(): void {
 			'type'        => 'text',
 			'name'        => 'feedland_blogroll_category',
 			'class'       => 'regular-text',
-			'placeholder' => 'blogroll',
 		)
 	);
 }
@@ -189,7 +187,7 @@ function feedland_blogroll_add_action_links( array $links ): array {
  *
  * @return array Validated options
  */
-function feedland_validate_options( array $input ): array {
+function feedland_blogroll_validate_options( array $input ): array {
 	$input         = array_map( 'sanitize_text_field', $input );
 	$user_endpoint = sprintf( '%1$sisuserindatabase?screenname=%2$s', FEEDLAND_DEFAULT_SERVER, $input['feedland_blogroll_username'] );
 
@@ -238,7 +236,7 @@ function feedland_validate_options( array $input ): array {
 			esc_html__( 'There was an error communicating with the server.', 'feedland-blogroll' )
 		);
 
-		$input['feedland_blogroll_category'] = '';
+		$input['feedland_blogroll_category'] = FEEDLAND_DEFAULT_CATEGORY;
 	}
 
 	$response = json_decode( wp_remote_retrieve_body( $request ), true );
@@ -248,11 +246,14 @@ function feedland_validate_options( array $input ): array {
 		add_settings_error(
 			'feedland_blogroll_settings',
 			'feedland_blogroll_category',
-			/* translators: %s: Default category placeholder */
-			esc_html__( 'The user does not have that category in their feed. Using no category to query feed.', 'feedland-blogroll' )
+			sprintf(
+				/* translators: %s: Default category placeholder */
+				esc_html__( 'The user does not have that category in their feed. Using default "%s".', 'feedland-blogroll' ),
+				FEEDLAND_DEFAULT_CATEGORY
+			)
 		);
 
-		$input['feedland_blogroll_category'] = '';
+		$input['feedland_blogroll_category'] = FEEDLAND_DEFAULT_CATEGORY;
 	}
 
 	return $input;
