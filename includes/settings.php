@@ -101,6 +101,21 @@ function feedland_blogroll_settings_init(): void {
 			'description' => esc_html__( 'Username associated with the FeedLand feed you want to display on your site.', 'feedland-blogroll' ),
 		)
 	);
+
+	add_settings_field(
+		'feedland_blogroll_server',
+		__( 'FeedLand Server', 'feedland-blogroll' ),
+		'feedland_blogroll_settings_field_callback',
+		'feedland_blogroll_settings',
+		'feedland_blogroll_settings_section',
+		array(
+			'label_for'   => 'feedland_blogroll_server',
+			'type'        => 'url',
+			'name'        => 'feedland_blogroll_server',
+			'class'       => 'regular-text',
+			'placeholder' => FEEDLAND_DEFAULT_SERVER
+		)
+	);
 }
 
 /**
