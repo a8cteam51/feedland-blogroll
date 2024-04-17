@@ -27,6 +27,7 @@ define( 'FEEDLAND_BLOGROLL_PATH', plugin_dir_path( __FILE__ ) );
 
 define( 'FEEDLAND_DEFAULT_SERVER', 'https://feedland.com/' );
 define( 'FEEDLAND_DEFAULT_USERNAME', 'davewiner' );
+define( 'FEEDLAND_DEFAULT_CATEGORY', 'blogroll' );
 
 require_once 'includes/settings.php';
 require_once 'includes/self-update.php';
@@ -151,7 +152,6 @@ function feedland_blogroll_enqueue_scripts(): void {
 		'BLOGROLL_OPTIONS',
 		array(
 			'title'                   => $options['feedland_blogroll_title'],
-			'flDisplayTitle'          => $options['feedland_blogroll_flDisplayTitle'] ?? false, // Prevents a warning if settings are saved and checkbox is unchecked.
 			'urlBlogrollOpml'         => feedland_get_opml_url(),
 			'urlFeedlandViewBlogroll' => feedland_get_blogroll_url(),
 			'maxItemsInBlogroll'      => 40,
@@ -189,7 +189,7 @@ function feedland_blogroll_default_options(): void {
 	// Set default option values if not already set
 	$defaults = array(
 		'feedland_blogroll_title'                   => __( 'My Blogroll', 'feedland-blogroll' ),
-		'feedland_blogroll_flDisplayTitle'          => '1',
+		'feedland_blogroll_category'                => FEEDLAND_DEFAULT_CATEGORY,
 		'feedland_blogroll_server'                  => FEEDLAND_DEFAULT_SERVER,
 		'feedland_blogroll_username'                => FEEDLAND_DEFAULT_USERNAME,
 		'feedland_blogroll_urlBlogrollOpml'         => feedland_get_opml_url(),
@@ -213,7 +213,7 @@ function feedland_blogroll_default_options(): void {
  *
  * @return string
  */
-function feedland_get_opml_url() {
+function feedland_get_opml_url( $category = FEEDLAND_DEFAULT_CATEGORY ) {
 	$options = get_option( 'feedland_blogroll_options' );
 
 	return add_query_arg(
@@ -221,6 +221,8 @@ function feedland_get_opml_url() {
 			array(
 				// phpcs:ignore WordPress.PHP.DisallowShortTernary.Found
 				'screenname' => $options['feedland_blogroll_username'] ?: FEEDLAND_DEFAULT_USERNAME,
+				// phpcs:ignore WordPress.PHP.DisallowShortTernary.Found
+				'catname'    => $category ?: $options['feedland_blogroll_category'],
 			)
 		),
 		// phpcs:ignore WordPress.PHP.DisallowShortTernary.Found
@@ -241,6 +243,7 @@ function feedland_get_blogroll_url() {
 			array(
 				// phpcs:ignore WordPress.PHP.DisallowShortTernary.Found
 				'username' => $options['feedland_blogroll_username'] ?: FEEDLAND_DEFAULT_USERNAME,
+				'catname'  => $options['feedland_blogroll_category'],
 			)
 		),
 		// phpcs:ignore WordPress.PHP.DisallowShortTernary.Found

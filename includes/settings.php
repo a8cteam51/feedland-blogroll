@@ -70,12 +70,13 @@ function feedland_blogroll_settings_init(): void {
 			'type'      => 'text',
 			'name'      => 'feedland_blogroll_title',
 			'class'     => 'regular-text', // Class for styling if needed
+			'description' => esc_html__( 'The title appears at the top of the blogroll box. It defaults to My Blogroll.', 'feedland-blogroll' ),
 		)
 	);
 
 	add_settings_field(
 		'feedland_blogroll_username',
-		__( 'FeedLand Username', 'feedland-blogroll' ),
+		__( 'FeedLand username', 'feedland-blogroll' ),
 		'feedland_blogroll_settings_field_callback',
 		'feedland_blogroll_settings',
 		'feedland_blogroll_settings_section',
@@ -84,13 +85,13 @@ function feedland_blogroll_settings_init(): void {
 			'type'        => 'text',
 			'name'        => 'feedland_blogroll_username',
 			'class'       => 'regular-text',
-			'description' => esc_html__( 'Username associated with the FeedLand feed you want to display on your site.', 'feedland-blogroll' ),
+			'description' => esc_html__( 'The username of the account whose blogroll you want shown. (Required)', 'feedland-blogroll' ),
 		)
 	);
 
 	add_settings_field(
 		'feedland_blogroll_server',
-		__( 'FeedLand Server', 'feedland-blogroll' ),
+		__( 'FeedLand server', 'feedland-blogroll' ),
 		'feedland_blogroll_settings_field_callback',
 		'feedland_blogroll_settings',
 		'feedland_blogroll_settings_section',
@@ -100,6 +101,22 @@ function feedland_blogroll_settings_init(): void {
 			'name'        => 'feedland_blogroll_server',
 			'class'       => 'regular-text',
 			'placeholder' => FEEDLAND_DEFAULT_SERVER,
+			'description' => esc_html__( 'The server that account is on. (Defaults to feedland.com, required)', 'feedland-blogroll' ),
+		)
+	);
+
+	add_settings_field(
+		'feedland_blogroll_category',
+		__( 'Category (optional)', 'feedland-blogroll' ),
+		'feedland_blogroll_settings_field_callback',
+		'feedland_blogroll_settings',
+		'feedland_blogroll_settings_section',
+		array(
+			'label_for'   => 'feedland_blogroll_category',
+			'type'        => 'text',
+			'name'        => 'feedland_blogroll_category',
+			'class'       => 'regular-text',
+			'description' => esc_html__( 'You can choose only to have feeds from a specific category in the blogroll, if you want all the feeds you\'ve subscribed to, leave this blank.', 'feedland-blogroll' ),
 		)
 	);
 }
@@ -239,6 +256,43 @@ function feedland_blogroll_validate_options( array $input ): array {
 			$input['feedland_blogroll_username'] = FEEDLAND_DEFAULT_USERNAME;
 		}
 	}
+
+		// Validate category, since username is now validated or default.
+		$request = wp_remote_get(
+			add_query_arg(
+				array(
+					'url' => rawurlencode( feedland_get_opml_url( $input['feedland_blogroll_category'] ) ),
+				),
+				FEEDLAND_DEFAULT_SERVER . 'getfeedlistfromopml'
+			)
+		);
+	
+		if ( is_wp_error( $request ) ) {
+			add_settings_error(
+				'feedland_blogroll_settings',
+				'feedland_blogroll_category',
+				esc_html__( 'There was an error communicating with the server.', 'feedland-blogroll' )
+			);
+	
+			$input['feedland_blogroll_category'] = FEEDLAND_DEFAULT_CATEGORY;
+		}
+	
+		$response = json_decode( wp_remote_retrieve_body( $request ), true );
+	
+		// If the response contains a message, the category does not exist.
+		if ( array_key_exists( 'message', $response ) ) {
+			add_settings_error(
+				'feedland_blogroll_settings',
+				'feedland_blogroll_category',
+				sprintf(
+					/* translators: %s: Default category placeholder */
+					esc_html__( 'The user does not have that category in their feed. Using default "%s".', 'feedland-blogroll' ),
+					FEEDLAND_DEFAULT_CATEGORY
+				)
+			);
+	
+			$input['feedland_blogroll_category'] = FEEDLAND_DEFAULT_CATEGORY;
+		}
 
 	return $input;
 }
