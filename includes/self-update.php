@@ -32,7 +32,7 @@ function feedland_blogroll_self_update( $update, array $plugin_data, string $plu
 	);
 
 	if ( is_wp_error( $response ) ) {
-		return;
+		return false;
 	} else {
 		$output = json_decode( wp_remote_retrieve_body( $response ), true );
 	}

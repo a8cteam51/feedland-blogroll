@@ -113,7 +113,7 @@ function feedland_blogroll_settings_init(): void {
 			'type'        => 'url',
 			'name'        => 'feedland_blogroll_server',
 			'class'       => 'regular-text',
-			'placeholder' => FEEDLAND_DEFAULT_SERVER
+			'placeholder' => FEEDLAND_DEFAULT_SERVER,
 		)
 	);
 }
@@ -141,6 +141,15 @@ function feedland_blogroll_settings_field_callback( array $args ): void {
 
 	switch ( $args['type'] ) {
 		case 'text':
+			printf(
+				'<input type="%1$s" id="%2$s" name="feedland_blogroll_options[%2$s]" value="%3$s" class="%4$s" placeholder="%5$s" />',
+				esc_attr( $args['type'] ),
+				esc_attr( $args['name'] ),
+				esc_attr( $value ),
+				esc_attr( $args['class'] ),
+				esc_attr( $args['placeholder'] ?? '' )
+			);
+			break;
 		case 'url':
 			printf(
 				'<input type="%1$s" id="%2$s" name="feedland_blogroll_options[%2$s]" value="%3$s" class="%4$s" placeholder="%5$s" />',
@@ -189,35 +198,71 @@ function feedland_blogroll_add_action_links( array $links ): array {
  * @return array Validated options
  */
 function feedland_blogroll_validate_options( array $input ): array {
-	$input         = array_map( 'sanitize_text_field', $input );
-	$user_endpoint = sprintf( '%1$sisuserindatabase?screenname=%2$s', FEEDLAND_DEFAULT_SERVER, $input['feedland_blogroll_username'] );
-
-	$request = wp_remote_get( $user_endpoint );
-
-	if ( is_wp_error( $request ) ) {
-		add_settings_error(
-			'feedland_blogroll_settings',
-			'feedland_blogroll_username',
-			esc_html__( 'There was an error communicating with the server.', 'feedland-blogroll' )
-		);
-
-		$input['feedland_blogroll_username'] = FEEDLAND_DEFAULT_USERNAME;
+	// Validate server URL
+	if ( ! empty( $input['feedland_blogroll_server'] ) ) {
+		// Ensure the server URL is properly formatted and sanitize it
+		if ( filter_var( $input['feedland_blogroll_server'], FILTER_VALIDATE_URL ) ) {
+			$input['feedland_blogroll_server'] = esc_url_raw( $input['feedland_blogroll_server'] );
+		} else {
+			add_settings_error(
+				'feedland_blogroll_settings',
+				'feedland_blogroll_server',
+				esc_html__( 'The FeedLand server URL is not valid.', 'feedland-blogroll' )
+			);
+			$input['feedland_blogroll_server'] = FEEDLAND_DEFAULT_SERVER;
+		}
+	} else {
+		$input['feedland_blogroll_server'] = FEEDLAND_DEFAULT_SERVER;
 	}
 
-	$response = json_decode( wp_remote_retrieve_body( $request ), true );
-
-	if ( ! $response['flInDatabase'] ) {
+	// Sanitize and validate username
+	if ( ! empty( $input['feedland_blogroll_username'] ) ) {
+		$input['feedland_blogroll_username'] = sanitize_text_field( $input['feedland_blogroll_username'] );
+	} else {
 		add_settings_error(
 			'feedland_blogroll_settings',
 			'feedland_blogroll_username',
 			sprintf(
 				/* translators: %s: Default username placeholder */
-				esc_html__( 'The username provided is not associated with a FeedLand account. Using default "%s".', 'feedland-blogroll' ),
+				esc_html__( 'The username cannot be empty. Using default "%s".', 'feedland-blogroll' ),
 				FEEDLAND_DEFAULT_USERNAME
 			)
 		);
-
 		$input['feedland_blogroll_username'] = FEEDLAND_DEFAULT_USERNAME;
+	}
+
+	// Now that we have sanitized server and username, we can perform the remote check
+	if ( ! empty( $input['feedland_blogroll_server'] ) && ! empty( $input['feedland_blogroll_username'] ) ) {
+		$user_endpoint = sprintf( '%1$sisuserindatabase?screenname=%2$s', $input['feedland_blogroll_server'], $input['feedland_blogroll_username'] );
+
+		$request = wp_remote_get( $user_endpoint );
+
+		// Handle error in communication with the server
+		if ( is_wp_error( $request ) ) {
+			add_settings_error(
+				'feedland_blogroll_settings',
+				'feedland_blogroll_server',
+				esc_html__( 'There was an error communicating with the server. Resetting to default server.', 'feedland-blogroll' )
+			);
+			$input['feedland_blogroll_server'] = FEEDLAND_DEFAULT_SERVER;
+		} else {
+			$response = json_decode( wp_remote_retrieve_body( $request ), true );
+
+			// Verify that the username exists in the database
+			if ( ! $response['flInDatabase'] ) {
+				add_settings_error(
+					'feedland_blogroll_settings',
+					'feedland_blogroll_username',
+					sprintf(
+						/* translators: %s: Default username placeholder */
+						esc_html__( 'The username provided is not associated with a FeedLand account. Using default "%s".', 'feedland-blogroll' ),
+						FEEDLAND_DEFAULT_USERNAME
+					)
+				);
+
+				$input['feedland_blogroll_username'] = FEEDLAND_DEFAULT_USERNAME;
+			}
+		}
 	}
 
 	return $input;
