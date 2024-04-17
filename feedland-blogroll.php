@@ -4,7 +4,7 @@
  * Description:       Show a Blogroll on your site.
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version:           1.1.0
+ * Version:           1.1.1
  * Author:            WordPress.com Special Projects
  * Author URI:        https://wpspecialprojects.wordpress.com
  * Update URI:        https://github.com/a8cteam51/feedland-blogroll
