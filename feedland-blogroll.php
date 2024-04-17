@@ -219,9 +219,11 @@ function feedland_get_opml_url() {
 	return add_query_arg(
 		array_filter(
 			array(
-				'screenname' => $options['feedland_blogroll_username'] ?: FEEDLAND_DEFAULT_USERNAME, // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
+				// phpcs:ignore WordPress.PHP.DisallowShortTernary.Found
+				'screenname' => $options['feedland_blogroll_username'] ?: FEEDLAND_DEFAULT_USERNAME,
 			)
 		),
+		// phpcs:ignore WordPress.PHP.DisallowShortTernary.Found
 		trailingslashit( $options['feedland_blogroll_server'] ?: FEEDLAND_DEFAULT_SERVER ) . 'opml'
 	);
 }
@@ -237,9 +239,11 @@ function feedland_get_blogroll_url() {
 	return add_query_arg(
 		array_filter(
 			array(
-				'username' => $options['feedland_blogroll_username'] ?: FEEDLAND_DEFAULT_USERNAME, // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
+				// phpcs:ignore WordPress.PHP.DisallowShortTernary.Found
+				'username' => $options['feedland_blogroll_username'] ?: FEEDLAND_DEFAULT_USERNAME,
 			)
 		),
+		// phpcs:ignore WordPress.PHP.DisallowShortTernary.Found
 		trailingslashit( $options['feedland_blogroll_server'] ?: FEEDLAND_DEFAULT_SERVER )
 	);
 }
