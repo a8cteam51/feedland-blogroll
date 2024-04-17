@@ -27,7 +27,7 @@ define( 'FEEDLAND_BLOGROLL_PATH', plugin_dir_path( __FILE__ ) );
 
 define( 'FEEDLAND_DEFAULT_SERVER', 'https://feedland.com/' );
 define( 'FEEDLAND_DEFAULT_USERNAME', 'davewiner' );
-define( 'FEEDLAND_DEFAULT_CATEGORY', 'blogroll' );
+define( 'FEEDLAND_DEFAULT_CATEGORY', '' );
 
 require_once 'includes/settings.php';
 require_once 'includes/self-update.php';
