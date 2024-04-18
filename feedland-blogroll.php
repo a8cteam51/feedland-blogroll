@@ -5,7 +5,7 @@
  * Requires at least: 6.1
  * Requires PHP:      7.4
  * Version:           1.1.1
- * Author:            WordPress.com Special Projects
+ * Author:            WordPress.com Special Projects & Dave Winer
  * Author URI:        https://wpspecialprojects.wordpress.com
  * Update URI:        https://github.com/a8cteam51/feedland-blogroll
  * License:           GPL-2.0-or-later
