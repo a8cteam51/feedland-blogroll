@@ -66,10 +66,10 @@ function feedland_blogroll_settings_init(): void {
 		'feedland_blogroll_settings',
 		'feedland_blogroll_settings_section',
 		array(
-			'label_for' => 'feedland_blogroll_title',
-			'type'      => 'text',
-			'name'      => 'feedland_blogroll_title',
-			'class'     => 'regular-text', // Class for styling if needed
+			'label_for'   => 'feedland_blogroll_title',
+			'type'        => 'text',
+			'name'        => 'feedland_blogroll_title',
+			'class'       => 'regular-text', // Class for styling if needed
 			'description' => esc_html__( 'The title appears at the top of the blogroll box. It defaults to My Blogroll.', 'feedland-blogroll' ),
 		)
 	);
@@ -274,7 +274,6 @@ function feedland_blogroll_validate_options( array $input ): array {
 		}
 
 		$response = json_decode( wp_remote_retrieve_body( $request ), true );
-		error_log( print_r( $request, TRUE ) );
 
 		// If the response contains a message, the category does not exist.
 		if ( array_key_exists( 'message', $response ) ) {
