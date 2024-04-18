@@ -246,11 +246,7 @@ function feedland_blogroll_validate_options( array $input ): array {
 			add_settings_error(
 				'feedland_blogroll_settings',
 				'feedland_blogroll_username',
-				sprintf(
-					/* translators: %s: Default username placeholder */
-					esc_html__( 'The username provided is not associated with a FeedLand account. Using default "%s".', 'feedland-blogroll' ),
-					FEEDLAND_DEFAULT_USERNAME
-				)
+				esc_html__( 'The username provided is not associated with a FeedLand account.', 'feedland-blogroll' )
 			);
 
 			$input['feedland_blogroll_username'] = FEEDLAND_DEFAULT_USERNAME;
