@@ -31,8 +31,11 @@ You can also output the shortcode in your php templates like this:
 ```PHP
 echo do_shortcode( '[feedland-blogroll]' );
 ```
-## Screenshot
-<img width="702" alt="SCR-20240328-jvrd" src="https://github.com/a8cteam51/feedland-blogroll/assets/2067992/e794e178-ab66-43af-971e-eff86ff66257">
+## Screenshots
+![SCR-20240328-jvrd](https://github.com/a8cteam51/feedland-blogroll/assets/2067992/e794e178-ab66-43af-971e-eff86ff66257)
+
+![SCR-20240418-jces](https://github.com/a8cteam51/feedland-blogroll/assets/2067992/e6fa9afd-bd88-42af-9225-02b2d66101e2)
+
 
 ## Disclaimer
 This public plugin is under active development. Please use at your own discretion and test thoroughly before adding to a production site.
