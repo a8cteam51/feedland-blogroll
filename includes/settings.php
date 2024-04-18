@@ -218,7 +218,7 @@ function feedland_blogroll_validate_options( array $input ): array {
 			'feedland_blogroll_username',
 			sprintf(
 				/* translators: %s: Default username placeholder */
-				esc_html__( 'The username cannot be empty. Using default "%s".', 'feedland-blogroll' ),
+				esc_html__( 'The username cannot be empty.', 'feedland-blogroll' ),
 				FEEDLAND_DEFAULT_USERNAME
 			)
 		);
