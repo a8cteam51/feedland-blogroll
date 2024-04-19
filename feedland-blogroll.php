@@ -4,7 +4,7 @@
  * Description:       Show a Blogroll on your site.
  * Requires at least: 6.1
  * Requires PHP:      7.4
- * Version:           1.1.1
+ * Version:           1.2.0
  * Author:            WordPress.com Special Projects & Dave Winer
  * Author URI:        https://wpspecialprojects.wordpress.com
  * Update URI:        https://github.com/a8cteam51/feedland-blogroll
@@ -31,6 +31,7 @@ define( 'FEEDLAND_DEFAULT_CATEGORY', '' );
 
 require_once 'includes/settings.php';
 require_once 'includes/self-update.php';
+require_once 'includes/blocks.php';
 
 /**
  * Actions and shortcodes here
@@ -39,6 +40,7 @@ add_action( 'wp_enqueue_scripts', 'feedland_blogroll_enqueue_scripts' );
 add_shortcode( 'feedland-blogroll', 'feedland_blogroll_shortcode' );
 add_action( 'admin_menu', 'feedland_blogroll_add_admin_menu' );
 add_action( 'admin_init', 'feedland_blogroll_settings_init' );
+add_action( 'init', 'feedland_blogroll_register_block' );
 register_activation_hook( __FILE__, 'feedland_blogroll_default_options' );
 add_filter( 'plugin_action_links_feedland-blogroll/feedland-blogroll.php', 'feedland_blogroll_add_action_links' );
 

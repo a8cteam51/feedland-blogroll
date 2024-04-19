@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "feedland/feedland-blogroll",
+  "version": "0.1.0",
+  "title": "Feedland Blogroll",
+  "category": "widgets",
+  "icon": "list-view",
+  "description": "Display a Feedland feed list",
+  "supports": {
+    "html": false
+  },
+  "textdomain": "feedland-blogroll",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css"
+}

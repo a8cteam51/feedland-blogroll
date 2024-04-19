@@ -1,0 +1,59 @@
+{
+	"name": "feedland-blogroll",
+	"version": "1.0.0",
+	"description": "Show a Blogroll on your site.",
+	"author": {
+		"name": "WordPress.com Special Projects Team",
+		"url": "https://wpspecialprojects.wordpress.com"
+	},
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"wordpress"
+	],
+	"homepage": "https://feedland.com",
+	"repository": "https://github.com/a8cteam51/feedland-blogroll",
+	"bugs": "https://github.com/a8cteam51/feedland-blogroll/issues",
+	"engines": {
+		"node": ">=20.0",
+		"npm": ">=10.0"
+	},
+	"devDependencies": {
+		"@csstools/postcss-sass": "^5.0.1",
+		"@wordpress/browserslist-config": "^5.34.1",
+		"@wordpress/postcss-plugins-preset": "^4.35.5",
+		"@wordpress/scripts": "^27.2.5",
+		"npm-run-all": "^4.1.5",
+		"postcss-cli": "^10.1.0",
+		"rtlcss": "^4.0.0"
+	},
+	"rtlcssConfig": {
+		"options": {
+			"autoRename": false,
+			"autoRenameStrict": false,
+			"blacklist": {},
+			"clean": true,
+			"greedy": false,
+			"processUrls": false,
+			"stringMap": []
+		},
+		"plugins": [],
+		"map": false
+	},
+	"browserslist": [
+		"extends @wordpress/browserslist-config"
+	],
+	"scripts": {
+		"build": "npm-run-all --sequential build:**",
+		"build:blocks": "wp-scripts build --webpack-src-dir=blocks/src --output-path=blocks/build",
+		"lint": "npm-run-all --sequential lint:**",
+		"lint:scripts": "wp-scripts lint-js blocks assets/js --no-error-on-unmatched-pattern",
+		"lint:styles": "wp-scripts lint-style blocks/**/*.{css,sass,scss} --allow-empty-input --report-descriptionless-disables --report-invalid-scope-disables --report-needless-disables",
+		"lint:pkg-json": "wp-scripts lint-pkg-json",
+		"lint:readme-md": "wp-scripts lint-md-docs README.md",
+		"packages-update": "wp-scripts packages-update --dist-tag=wp-6.5",
+		"check-engines": "wp-scripts check-engines",
+		"check-licenses": "wp-scripts check-licenses",
+		"start": "npm-run-all --parallel start:**",
+		"start:blocks": "wp-scripts start --webpack-src-dir=blocks/src --output-path=blocks/build"
+	}
+}
