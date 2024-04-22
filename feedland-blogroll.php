@@ -213,14 +213,14 @@ function feedland_blogroll_default_options(): void {
  *
  * @return string
  */
-function feedland_get_opml_url( $category = FEEDLAND_DEFAULT_CATEGORY ) {
+function feedland_get_opml_url( $username = FEEDLAND_DEFAULT_USERNAME, $category = FEEDLAND_DEFAULT_CATEGORY ) {
 	$options = get_option( 'feedland_blogroll_options' );
 
 	return add_query_arg(
 		array_filter(
 			array(
 				// phpcs:ignore WordPress.PHP.DisallowShortTernary.Found
-				'screenname' => $options['feedland_blogroll_username'] ?: FEEDLAND_DEFAULT_USERNAME,
+				'screenname' => $username ?: $options['feedland_blogroll_username'],
 				// phpcs:ignore WordPress.PHP.DisallowShortTernary.Found
 				'catname'    => $category ?: $options['feedland_blogroll_category'],
 			)
