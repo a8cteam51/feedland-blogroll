@@ -257,7 +257,7 @@ function feedland_blogroll_validate_options( array $input ): array {
 		$request = wp_remote_get(
 			add_query_arg(
 				array(
-					'url' => rawurlencode( feedland_get_opml_url( $input['feedland_blogroll_category'] ) ),
+					'url' => rawurlencode( feedland_get_opml_url( $input['feedland_blogroll_username'], $input['feedland_blogroll_category'] ) ),
 				),
 				FEEDLAND_DEFAULT_SERVER . 'getfeedlistfromopml'
 			)
