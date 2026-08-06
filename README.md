@@ -5,9 +5,7 @@
 
 ## What is this?
 
-This is a WordPress plugin which will display your FeedLand Blogroll on your WordPress site!
-
-For more information on what these blogrolls are, please visit: https://blogroll.social/
+This is a WordPress plugin which will display your Feedland Blogroll on your WordPress site!
 
 ## How to Use
 
