@@ -1,11 +1,11 @@
 | :exclamation:  This is a public repository |
 |--------------------------------------------|
 
-# Feedland Blogroll for WordPress
+# FeedLand Blogroll for WordPress
 
 ## What is this?
 
-This is a WordPress plugin which will display your Feedland Blogroll on your WordPress site!
+This is a WordPress plugin which will display your FeedLand Blogroll on your WordPress site!
 
 ## How to Use
 
