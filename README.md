@@ -7,6 +7,8 @@
 
 This is a WordPress plugin which will display your FeedLand Blogroll on your WordPress site!
 
+For more information on what these blogrolls are, please visit: https://blogroll.social/
+
 ## How to Use
 
 1. [Download the latest release](https://github.com/a8cteam51/feedland-blogroll/releases/latest/download/feedland-blogroll.zip)
@@ -33,7 +35,3 @@ echo do_shortcode( '[feedland-blogroll]' );
 ![SCR-20240328-jvrd](https://github.com/a8cteam51/feedland-blogroll/assets/2067992/e794e178-ab66-43af-971e-eff86ff66257)
 
 ![SCR-20240418-jces](https://github.com/a8cteam51/feedland-blogroll/assets/2067992/e6fa9afd-bd88-42af-9225-02b2d66101e2)
-
-
-## Disclaimer
-This public plugin is under active development. Please use at your own discretion and test thoroughly before adding to a production site.
